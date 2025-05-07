@@ -47,7 +47,7 @@ def snapshot(dir):
         pickle.dump(snapshot_data, f)
 
     # update history
-    
+
     meta = {
         "time": datetime.datetime.now(datetime.timezone.utc).timestamp(),
         "hash": hash_digest,
@@ -113,9 +113,11 @@ def log():
     if os.path.exists(history_path) and os.path.getsize(history_path) > 0:
         with open(history_path, "rb") as f:
             history_list = pickle.load(f)
-    
-    for hash,item in history_list.items():
-        timestamp = datetime.datetime.fromtimestamp(item["time"]).strftime('%Y-%m-%d %H:%M:%S UTC')
+
+    for hash, item in history_list.items():
+        timestamp = datetime.datetime.fromtimestamp(item["time"]).strftime(
+            "%Y-%m-%d %H:%M:%S UTC"
+        )
         print(f"commit {item['hash']}")
         print(f"Date:   {timestamp}")
         print()
@@ -126,7 +128,12 @@ def log():
 if __name__ == "__main__":
     import sys
 
+    if len(sys.argv) < 2:
+        print("command required")
+        sys.exit(1)
+
     command = sys.argv[1]
+
     if command == "init":
         init_vcs()
     elif command == "snapshot":
